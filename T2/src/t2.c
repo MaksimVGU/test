@@ -105,7 +105,7 @@ int main(void)
             char deistvie;
             double a,b;
             int size;
-            printf("введите размер вектора");
+            printf("введите размер вектора ");
             scanf("%i",&size);
             t=malloc(size*sizeof(int));
             a1=malloc(size*sizeof(int));
@@ -164,6 +164,9 @@ int main(void)
                 default:
                 printf("to be contine");
                 break;
+                free(a1);
+                free(b1);
+                free(t);
             }
         }
         printf("\n хотите продолжить (y/n) ?\n");
