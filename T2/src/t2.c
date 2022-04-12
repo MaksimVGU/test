@@ -142,20 +142,52 @@ int main(int argc,char *argv[])
                     {
                         t[i]=a1[i]+b1[i];
                     }
+                    fprintf(output,"(");
+                    for (int i=0;i<size;i++)
+                    {
+                    	fprintf(output," %i ", a1[i]);
+                    }
+                    fprintf(output,")");
+                    fprintf(output," + ");
+                    fprintf(output,"(");
+                    for (int i=0;i<size;i++)
+                    {
+                    	fprintf(output," %i ", b1[i]);
+                    }
+                    fprintf(output,")");
+                    fprintf(output," = ");
+                    fprintf(output,"(");
                     for (int i = 0; i < size; i++)
                     {
-                        fprintf(output,"%i ", t[i]);
+                        fprintf(output," %i ", t[i]);
                     }
+                    fprintf(output,")");
                 break;
                 case '-': //блок вычитания
                     for (int i = 0; i < size; i++)
                     {
                         t[i]=a1[i]-b1[i];
                     }
+                    fprintf(output,"(");
+                    for (int i=0;i<size;i++)
+                    {
+                    	fprintf(output," %i ", a1[i]);
+                    }
+                    fprintf(output,")");
+                    fprintf(output," - ");
+                    fprintf(output,"(");
+                    for (int i=0;i<size;i++)
+                    {
+                    	fprintf(output," %i ", b1[i]);
+                    }
+                    fprintf(output,")");
+                    fprintf(output," = ");
+                    fprintf(output,"(");
                     for (int i = 0; i < size; i++)
                     {
-                        fprintf(output,"%i ", t[i]);
+                        fprintf(output," %i ", t[i]);
                     }
+                    fprintf(output,")");
 
                 break;
                 case '*': //блок умножения скалярного
@@ -163,6 +195,20 @@ int main(int argc,char *argv[])
                     {
                         t[i]=a1[i]*b1[i];
                     }
+                    fprintf(output,"(");
+                    for (int i=0;i<size;i++)
+                    {
+                    	fprintf(output," %i ", a1[i]);
+                    }
+                    fprintf(output,")");
+                    fprintf(output," * ");
+                    fprintf(output,"(");
+                    for (int i=0;i<size;i++)
+                    {
+                    	fprintf(output," %i ", b1[i]);
+                    }
+                    fprintf(output,")");
+                    fprintf(output," = ");
                     for (int i=0;i<size;i++)
                     {
                     	rez+=t[i];
