@@ -19,74 +19,76 @@ char regul;
 double coordinate;
 int main(int argc,char *argv[])
 {
+	setvbuf(stdout, NULL, _IONBF, 0);
+    setvbuf(stderr, NULL, _IONBF, 0);
 	FILE *input,*output;
-	input =fopen("input.txt","r");
+	char filename[259];
+	printf("Введите откуда читать\n");
+	scanf("%s",filename);
+	input=fopen(filename,"r");
 	output=fopen("output.txt","w");
 	do
     {
-
-        setvbuf(stdout, NULL, _IONBF, 0);
-        setvbuf(stderr, NULL, _IONBF, 0);
-        fprintf(output,"вектор(v)/Калькулятор(s)\n");
+        //fprintf(output,"вектор(v)/Калькулятор(s)\n");
         fscanf(input," %c", &type);
         if (type=='s')
         {
             // пишем сначала все функции и их обозначения
-            fprintf(output," сумма, знак +\n");
-            fprintf(output," разность, знак -\n");
-            fprintf(output," умножение, знак *\n");
-            fprintf(output," деление, знак /\n");
-            fprintf(output," степень, знак ^\n");
-            fprintf(output," факториал, знак !\n\n");
+            //fprintf(output," сумма, знак +\n");
+        	//fprintf(output," разность, знак -\n");
+        	//fprintf(output," умножение, знак *\n");
+        	//fprintf(output," деление, знак /\n");
+        	//fprintf(output," степень, знак ^\n");
+        	//fprintf(output," факториал, знак !\n\n");
             double a,b,i,d; // задаем переменные типа double
             char c; // задаем переменную типа char
-            fprintf(output," введите операцию "); // выводим надпись с подсказкой
+            //fprintf(output," введите операцию "); // выводим надпись с подсказкой
             fscanf(input," %c", &c); //вводим с
             switch(c) //блок функций
             {
                 case '+'://блок суммы
-                    fprintf(output,"введите первое число a=");
+                	//fprintf(output,"введите первое число a=");
                     fscanf(input," %lg",&a);
-                    fprintf(output,"введите первое число b=");
+                    //fprintf(output,"введите первое число b=");
                     fscanf (input," %lg",&b);
-                    fprintf(output," %lg plus %lg = %lg", a,b, a+b);
+                    fprintf(output," %lg plus %lg = %lg\n", a,b, a+b);
                     break;
                 case '-'://блок разности
-                    fprintf(output,"введите первое число a=");
+                	//fprintf(output,"введите первое число a=");
                     fscanf(input," %lg",&a);
-                    fprintf(output," введите первое число b=");
+                    //fprintf(output," введите первое число b=");
                     fscanf (input," %lg",&b);
-                    fprintf (output," %lg minus %lg = %lg", a,b,a-b);
+                    fprintf (output," %lg minus %lg = %lg\n", a,b,a-b);
                     break;
                 case '*'://блок умножения
-                    fprintf(output," введите первое число a=");
+                	//fprintf(output," введите первое число a=");
                     fscanf(input," %lg",&a);
-                    fprintf(output," введите первое число b=");
+                    //fprintf(output," введите первое число b=");
                     fscanf (input," %lg",&b);
-                    fprintf (output," %lg multiply by %lg = %lg", a,b, a*b);
+                    fprintf (output," %lg multiply by %lg = %lg\n", a,b, a*b);
                     break;
                 case '/'://блок деления
-                    fprintf(output," введите первое число a=");
+                	//fprintf(output," введите первое число a=");
                     fscanf(input," %lg",&a);
-                    fprintf(output," введите первое число b=");
+                    //fprintf(output," введите первое число b=");
                     fscanf (input," %lg",&b);
-                    fprintf (output," %lg divide by %lg = %lg", a,b,a/b);
+                    fprintf (output," %lg divide by %lg = %lg\n", a,b,a/b);
                     break;
                 case '^': //блок степени
-                    fprintf(output," введите первое число a=");
+                	//fprintf(output," введите первое число a=");
                     fscanf(input," %lg",&a);
-                    fprintf(output,"введите первое число b=");
+                    //fprintf(output,"введите первое число b=");
                     fscanf (input," %lg",&b);
                     d=a;//приравниваем для того, чтобы посчитать степень
                     for (i=1;i<b;i++)
                         {
                             d=d*a;
                         }
-                    fprintf(output,"%lg в степени %lg = %g",a,b,d);
+                    fprintf(output,"%lg в степени %lg = %g\n",a,b,d);
                     break;
                 case '!'://блок факториала
                     d=1;//приравниваем для того, чтобы посчитать факториал
-                    fprintf(output," введите первое число a=");
+                    //fprintf(output," введите первое число a=");
                     fscanf(input," %lg",&a);
                     if (a>=0)//тк факториал 0=1 тогда сделаем такой цикл
                     {
@@ -94,13 +96,13 @@ int main(int argc,char *argv[])
                         {
                             d=d*(i+1);
                         }
-                        fprintf(output,"факториал %lg = %lg",a,d);
+                        fprintf(output,"факториал %lg = %lg\n",a,d);
                     }
                     else
-                        fprintf(output," nop");
+                        fprintf(output," nop\n");
                     break;
                 default:
-                    fprintf (output," nop");
+                    fprintf (output," nop\n");
 
             }
         }
@@ -113,27 +115,27 @@ int main(int argc,char *argv[])
             char deistvie;
             double a,b;
             int size;
-            fprintf(output,"введите размер вектора ");
+            //fprintf(output,"введите размер вектора ");
             fscanf(input,"%i",&size);
             t=malloc(size*sizeof(int));
             a1=malloc(size*sizeof(int));
             b1=malloc(size*sizeof(int));
             for(int i=0;i<size;i++)
             {
-                fprintf(output,"введите координтаты вектора a ");
+            	//fprintf(output,"введите координтаты вектора a ");
                 fscanf(input,"%lf",&a);
                 a1[i]=a;
             }
             for (int i = 0; i < size; i++)
             {
-                fprintf(output,"введите координтаты вектора b ");
+            	//fprintf(output,"введите координтаты вектора b ");
                 fscanf(input,"%lf",&b);
                 b1[i]=b;
             }
-            fprintf(output,"введите действие\n");
-            fprintf(output,"Сложение вектора a и b --- '+'\n");
-            fprintf(output,"вычитание из вектора a вектор b --- '-'\n");
-            fprintf(output,"Скалярно умножить вектор a на b --- '*'\n");
+            //fprintf(output,"введите действие\n");
+            //fprintf(output,"Сложение вектора a и b --- '+'\n");
+            //fprintf(output,"вычитание из вектора a вектор b --- '-'\n");
+            //fprintf(output,"Скалярно умножить вектор a на b --- '*'\n");
             fscanf(input," %c",&deistvie);
             switch (deistvie)
             {
@@ -161,7 +163,7 @@ int main(int argc,char *argv[])
                     {
                         fprintf(output," %i ", t[i]);
                     }
-                    fprintf(output,")");
+                    fprintf(output,")\n");
                 break;
                 case '-': //блок вычитания
                     for (int i = 0; i < size; i++)
@@ -187,7 +189,7 @@ int main(int argc,char *argv[])
                     {
                         fprintf(output," %i ", t[i]);
                     }
-                    fprintf(output,")");
+                    fprintf(output,")\n");
 
                 break;
                 case '*': //блок умножения скалярного
@@ -213,26 +215,26 @@ int main(int argc,char *argv[])
                     {
                     	rez+=t[i];
                     }
-                        fprintf(output,"%i ", rez);
+                        fprintf(output,"%i \n", rez);
                 break;
                 default:
-                fprintf(output,"to be contine");
+                fprintf(output,"to be contine\n");
                 break;
                 free(a1);
                 free(b1);
                 free(t);
             }
         }
-        fprintf(output,"\n хотите продолжить (y/n) ?\n");
+        //fprintf(output,"\n хотите продолжить (y/n) ?\n");
         fscanf (input," %c", &regul);
     }
     while((regul)=='y');
     if ((regul)=='n')
         {
-            fprintf(output,"end");
+            fprintf(output,"end\n");
         }
     else
-        fprintf(output,"вы ввели неправильно, для завершения надо было n, программа завершена из-за вашей ошибки");
+        fprintf(output,"вы ввели неправильно, для завершения надо было n, программа завершена из-за вашей ошибки\n");
     fclose(input);
     fclose(output);
     return 0;
