@@ -22,11 +22,14 @@ int main(int argc,char *argv[])
 	setvbuf(stdout, NULL, _IONBF, 0);
     setvbuf(stderr, NULL, _IONBF, 0);
 	FILE *input,*output;
-	char filename[259];
+	char filename1[259];
+	char filename2[259];
 	printf("Введите откуда читать\n");
-	scanf("%s",filename);
-	input=fopen(filename,"r");
-	output=fopen("output.txt","w");
+	scanf("%s",filename1);
+	printf("Введите куда записать\n");
+	scanf("%s",filename2);
+	input=fopen(filename1,"r");
+	output=fopen(filename2,"w");
 	do
     {
         //fprintf(output,"вектор(v)/Калькулятор(s)\n");
