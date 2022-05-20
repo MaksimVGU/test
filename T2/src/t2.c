@@ -20,49 +20,24 @@ double *num(char deistvie,double *peremenai_1, double *peremenai_2)
 {
     double *rez;
     rez=malloc(1*sizeof(double));
-    char sign;
-    switch (sign)
+    switch (deistvie)
     {
         case '+'://блок суммы
-            //fprintf(output,"введите первое число a=");
-            //fscanf(input," %lg",&a);
-            //fprintf(output,"введите первое число b=");
-            //fscanf (input," %lg",&b);
-            //fprintf(output," %lg plus %lg = %lg\n", a,b, a+b);
             rez[0]=peremenai_1[0]+peremenai_2[0];
             return rez;
             break;
         case '-'://блок разности
-            //fprintf(output,"введите первое число a=");
-            //fscanf(input," %lg",&a);
-            //fprintf(output," введите первое число b=");
-            //fscanf (input," %lg",&b);
-            //fprintf (output," %lg minus %lg = %lg\n", a,b,a-b);
             rez[0]=peremenai_1[0]-peremenai_2[0];
             return rez;
             break;
         case '*'://блок умножени€
-            //fprintf(output," введите первое число a=");
-            //fscanf(input," %lg",&a);
-            //fprintf(output," введите первое число b=");
-            //fscanf (input," %lg",&b);
-            //fprintf (output," %lg multiply by %lg = %lg\n", a,b, a*b);
             rez[0]=peremenai_1[0]*peremenai_2[0];
             return rez;
             break;
         case '/'://блок делени€
-            //fprintf(output," введите первое число a=");
-            //fscanf(input," %lg",&a);
-            //fprintf(output," введите первое число b=");
-            //fscanf (input," %lg",&b);
-            //fprintf (output," %lg divide by %lg = %lg\n", a,b,a/b);
             return rez;
             break;
         case '^': //блок степени
-            //fprintf(output," введите первое число a=");
-            //fscanf(input," %lg",&a);
-            //fprintf(output,"введите первое число b=");
-            //fscanf (input," %lg",&b);
             rez[0]=peremenai_1[0];//приравниваем дл€ того, чтобы посчитать степень
             if (peremenai_2[0]==0)
             {
@@ -76,7 +51,7 @@ double *num(char deistvie,double *peremenai_1, double *peremenai_2)
             }
             else
             {
-                for (int i=1;i<peremenai_2;i++)
+                for (int i=1;i<peremenai_2[0];i++)
                     {
                         rez[0]*=peremenai_1[0];
                     }
@@ -86,21 +61,19 @@ double *num(char deistvie,double *peremenai_1, double *peremenai_2)
             break;
         case '!'://блок факториала
             rez[0]=1;//приравниваем дл€ того, чтобы посчитать факториал
-            //fprintf(output," введите первое число a=");
-            //fscanf(input," %lg",&a);
             if (peremenai_1[0]>=0)//тк факториал 0=1 тогда сделаем такой цикл
             {
-                for (int i=0;i<peremenai_1;i++)
+                for (int i=0;i<peremenai_1[0];i++)
                 {
                     rez[0]=rez[0]*(i+1);
                 }
-                //fprintf(output,"факториал %lg = %lg\n",a,d);
+                return rez;
             }
             else
             {
-                //fprintf(output," nop\n");
+                return rez=0;
             }
-            return rez;
+
             break;
     }
     return peremenai_1;
@@ -112,7 +85,7 @@ double *num(char deistvie,double *peremenai_1, double *peremenai_2)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////‘”Ќ ÷»я ƒ≈…—“¬»я — ¬≈ “ќ–јћ»////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-double *vector(int type, char deistvie,double *peremenai_1,double *peremenai_2)
+double*vector(int type, char deistvie,double *peremenai_1,double *peremenai_2)
 {
     double *rez;
     rez=malloc(type*sizeof(double));
@@ -142,7 +115,7 @@ double *vector(int type, char deistvie,double *peremenai_1,double *peremenai_2)
         return rez;
         break;
     default:
-    return 'nop';
+    return rez=0;
         break;
     }
     return peremenai_1;
@@ -160,15 +133,15 @@ typedef struct List_IN
     char deistvie;
     double *peremenai_1;
     double *peremenai_2;
-    struct List_IN *next
+    struct List_IN *next;
 }List_IN;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////—“–” “”–ј ƒЋя ¬џ¬ќƒј ƒјЌЌџ’///////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 typedef struct List_OUT
 {
-    float *rez;
-    struct List_OUT *next_out
+    double *rez;
+    struct List_OUT *next_out;
 }List_OUT;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////‘”Ќ ÷»я ƒЋя ƒќЅј¬Ћ≈Ќ»я „»—Ћј////////////////////////////////////////////////
@@ -183,46 +156,9 @@ double *addperemenai(FILE *input, int type)
     }
     return peremenai;
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////‘”Ќ ÷»я ƒЋя ƒќЅј¬Ћ≈Ќ»я ЁЋ≈ћ≈Ќ“ј/////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-double *addelement(List_IN *current, FILE *input)
-{
-    List_IN *tmp_in=malloc(1*sizeof(List_IN));
-    fscanf(input,"%i %c", &tmp_in->type,&tmp_in->deistvie);
-    if (tmp_in->deistvie='!')
-    {
-        tmp_in->peremenai_1=addperemenai(input,tmp_in->type);
-        tmp_in->peremenai_2=NULL;
-    }
-    else if(tmp_in->deistvie!='!')
-    {
-        tmp_in->peremenai_1=addperemenai(input,tmp_in->type);
-        tmp_in->peremenai_2=addperemenai(input,tmp_in->type);
-    }
-    tmp_in->next=NULL;
-    current->next=tmp_in;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////‘”Ќ ÷»я ƒЋя ƒќЅј¬Ћ≈Ќ»я ЁЋ≈ћ≈Ќ“ј –≈«”Ћ№“ј“ј//////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void addelement_out(List_OUT *current_res, List_IN *current)
-{
-    List_OUT *tmp_out=malloc(1*sizeof(List_OUT));
-    if(current->type==1)
-    {
-        tmp_out->rez=num(current->deistvie,current->peremenai_1,current->peremenai_2);
-    }
-    else
-    {
-        tmp_out->rez=vector(current->type,current->deistvie,current->peremenai_1,current->peremenai_2);
-    }
-    tmp_out->next_out=NULL;
-    current_res->next_out=tmp_out;
-}
 int main(int argc,char *argv[])
-{   char end='y';
-    char regul;
+{
+	char end='y';
     setvbuf(stdout, NULL, _IONBF, 0);
     setvbuf(stderr, NULL, _IONBF, 0);
     FILE *input,*output;
@@ -242,7 +178,7 @@ int main(int argc,char *argv[])
         {
             head=malloc(1*sizeof(List_IN));
             fscanf(input,"%i %c",&head->type, &head->deistvie);
-            if (head->deistvie='!')
+            if (head->deistvie=='!')
             {
                 head->peremenai_1=addperemenai(input,head->type);
                 head->peremenai_2=NULL;
@@ -252,32 +188,25 @@ int main(int argc,char *argv[])
                 head->peremenai_1=addperemenai(input,head->type);
                 head->peremenai_2=addperemenai(input,head->type);
             }
-            current=head;
-            addelement(current,input);
             current=current->next;
         }
-        current=head;
         fclose(input);
+        current=head;
         output=fopen(File_OUT,"w");
         while (current!=NULL)
         {
             if (current->type==1)
             {
                 head_OUT->rez=num(current->deistvie,current->peremenai_1,current->peremenai_2);
-            }
-            else
-            {
-                head_OUT->rez=vector(current->type,current->deistvie,current->peremenai_1,current->peremenai_2);
-            }
-            if (current->type==1)
-            {
                 fprintf(output,"%f %c %f = %f",current->peremenai_1,current->deistvie,current->peremenai_2,head_OUT->rez);
             }
             else
             {
-                fprintf(output,"(%f) %c (%f) = %f",current->peremenai_1,current->deistvie,current->peremenai_2,head_OUT->rez);
+                head_OUT->rez=vector(current->type,current->deistvie,current->peremenai_1,current->peremenai_2);
+                fprintf(output,"(%f) %c (%f) = (%f)",current->peremenai_1,current->deistvie,current->peremenai_2,head_OUT->rez);
             }
             current=current->next;
+            current_OUT=current_OUT->next_out;
         }
         fclose(output);
         printf("продолжить?\n");
@@ -285,4 +214,3 @@ int main(int argc,char *argv[])
     }
     return 0;
 }
-
