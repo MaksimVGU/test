@@ -156,10 +156,51 @@ double *addperemenai(FILE *input, int type)
     }
     return peremenai;
 }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////ФУНКЦИЯ ДЛЯ ДОБАВЛЕНИЯ ЭЛЕМЕНТА ВВОДА///////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void add_el_in(List_IN *current, FILE *input)
+{
+    List_IN *tmp=malloc(1*sizeof(List_IN));
+    fscanf(input,"%i* %c",tmp->type,tmp->deistvie);
+    if (tmp->deistvie!='!')
+    {
+        tmp->peremenai_1=addperemenai(input,tmp->type);
+        tmp->peremenai_2=NULL;
+    }
+    else
+    {
+        tmp->peremenai_1=addperemenai(input,tmp->type);
+        tmp->peremenai_2=addperemenai(input,tmp->type);
+    }
+    current->next=tmp;
+    tmp->next=NULL;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////ФУНКЦИЯ ДЛЯ ДОБАВЛЕНИЯ ЭЛЕМЕНТА ВЫВОДА//////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void add_el_out(List_OUT *current_OUT, List_IN *current)
+{
+    List_OUT *tmp=malloc(sizeof(List_OUT));
+    if (current->type>1)
+    {
+        tmp->rez=vector(current->type,current->deistvie,current->peremenai_1,current->peremenai_2);
+    }
+    else
+    {
+        tmp->rez=num(current->deistvie,current->peremenai_1,current->peremenai_2);
+    }
+    current_OUT->next_out=tmp;
+    tmp->next_out=NULL;
+
+
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int main(int argc,char *argv[])
 {
 	char end='y';
-    char regul;
     setvbuf(stdout, NULL, _IONBF, 0);
     setvbuf(stderr, NULL, _IONBF, 0);
     FILE *input,*output;
@@ -189,25 +230,37 @@ int main(int argc,char *argv[])
                 head->peremenai_1=addperemenai(input,head->type);
                 head->peremenai_2=addperemenai(input,head->type);
             }
-            current=current->next;
-        }
-        fclose(input);
-        current=head;
-        output=fopen(File_OUT,"w");
-        while (current!=NULL)
-        {
+            current=head;
+            while (feof(input))
+            {
+            	add_el_in(current,input);
+                current=current->next;
+            }
+            current=head;
+            fclose(input);
+            output=fopen(File_OUT,"w");
             if (current->type==1)
             {
                 head_OUT->rez=num(current->deistvie,current->peremenai_1,current->peremenai_2);
-                fprintf(output,"%f %c %f = %f",current->peremenai_1,current->deistvie,current->peremenai_2,head_OUT->rez);
             }
             else
             {
                 head_OUT->rez=vector(current->type,current->deistvie,current->peremenai_1,current->peremenai_2);
-                fprintf(output,"(%f) %c (%f) = (%f)",current->peremenai_1,current->deistvie,current->peremenai_2,head_OUT->rez);
             }
-            current=current->next;
-            current_OUT=current_OUT->next_out;
+            while (current!=NULL)
+            {
+                add_el_out(current_OUT,current);
+                current=current->next;
+                current_OUT=current_OUT->next_out;
+            }
+            current_OUT=head_OUT;
+            while (current_OUT!=NULL)
+            {
+                fprintf(output,"(%f) %c (%f)= (%f)",current->peremenai_1,current->deistvie,current->peremenai_2,current_OUT->rez);
+                current=current->next;
+                current_OUT=current_OUT->next_out;
+            }
+
         }
         fclose(output);
         printf("продолжить?\n");
