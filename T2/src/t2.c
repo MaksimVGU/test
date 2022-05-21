@@ -24,30 +24,24 @@ double *num(char deistvie,double *peremenai_1, double *peremenai_2)
     {
         case '+'://блок суммы
             rez[0]=peremenai_1[0]+peremenai_2[0];
-            return rez;
             break;
         case '-'://блок разности
             rez[0]=peremenai_1[0]-peremenai_2[0];
-            return rez;
             break;
         case '*'://блок умножения
             rez[0]=peremenai_1[0]*peremenai_2[0];
-            return rez;
             break;
         case '/'://блок деления
-            return rez;
             break;
         case '^': //блок степени
             rez[0]=peremenai_1[0];//приравниваем для того, чтобы посчитать степень
             if (peremenai_2[0]==0)
             {
                 rez[0]=1;
-                return rez;
             }
             else if (peremenai_2[0]==1)
             {
                 rez[0]=peremenai_1[0];
-                return rez;
             }
             else
             {
@@ -57,7 +51,6 @@ double *num(char deistvie,double *peremenai_1, double *peremenai_2)
                     }
                 //fprintf(output,"%lg в степени %lg = %g\n",a,b,d);
             }
-            return rez;
             break;
         case '!'://блок факториала
             rez[0]=1;//приравниваем для того, чтобы посчитать факториал
@@ -67,20 +60,15 @@ double *num(char deistvie,double *peremenai_1, double *peremenai_2)
                 {
                     rez[0]=rez[0]*(i+1);
                 }
-                return rez;
             }
             else
             {
-                return rez=0;
+                rez[0]=0;
             }
 
             break;
     }
-    return peremenai_1;
-    return peremenai_2;
-    free(peremenai_1);
-    free(peremenai_2);
-    free(rez);
+    return rez;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////ФУНКЦИЯ ДЕЙСТВИЯ С ВЕКТОРАМИ////////////////////////////////////////////////
@@ -98,31 +86,21 @@ double*vector(int type, char deistvie,double *peremenai_1,double *peremenai_2)
         {
             rez[i]=peremenai_1[i]+peremenai_2[i];
         }
-        return rez;
         break;
     case '-':
         for (int i=0;i<type;i++)
         {
             rez[i]=peremenai_1[i]-peremenai_2[i];
         }
-        return rez;
         break;
     case '*':
         for (int i = 0; i < type; i++)
         {
             rez[i]+=peremenai_1[i]*peremenai_2[i];
         }
-        return rez;
-        break;
-    default:
-    return rez=0;
         break;
     }
-    return peremenai_1;
-    return peremenai_2;
-    free(peremenai_1);
-    free(peremenai_2);
-    free(rez);
+    return rez;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////СТРУКТУРА ДЛЯ ВВОДА ДАННЫХ////////////////////////////////////////////////
@@ -247,7 +225,7 @@ int main(int argc,char *argv[])
                 head_OUT->rez=vector(current->type,current->deistvie,current->peremenai_1,current->peremenai_2);
             }
             current_OUT=head_OUT;
-            current_OUT->next_out;
+            current_OUT=current_OUT->next_out;
             while (current!=NULL)
             {
                 add_el_out(current_OUT,current);//ТУТ ОШИБКА
