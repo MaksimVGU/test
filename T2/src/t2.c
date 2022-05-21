@@ -162,7 +162,7 @@ double *addperemenai(FILE *input, int type)
 void add_el_in(List_IN *current, FILE *input)
 {
     List_IN *tmp=malloc(1*sizeof(List_IN));
-    fscanf(input,"%i* %c",tmp->type,tmp->deistvie);
+    fscanf(input,"%i %c",&tmp->type,&tmp->deistvie);
     if (tmp->deistvie!='!')
     {
         tmp->peremenai_1=addperemenai(input,tmp->type);
@@ -190,10 +190,8 @@ void add_el_out(List_OUT *current_OUT, List_IN *current)
     {
         tmp->rez=num(current->deistvie,current->peremenai_1,current->peremenai_2);
     }
-    current_OUT->next_out=tmp;
     tmp->next_out=NULL;
-
-
+    current_OUT->next_out=tmp;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -238,6 +236,7 @@ int main(int argc,char *argv[])
             }
             current=head;
             fclose(input);
+            head_OUT=malloc(1*sizeof(List_OUT));
             output=fopen(File_OUT,"w");
             if (current->type==1)
             {
@@ -247,16 +246,46 @@ int main(int argc,char *argv[])
             {
                 head_OUT->rez=vector(current->type,current->deistvie,current->peremenai_1,current->peremenai_2);
             }
+            current_OUT=head_OUT;
+            current_OUT->next_out;
             while (current!=NULL)
             {
-                add_el_out(current_OUT,current);
+                add_el_out(current_OUT,current);//ТУТ ОШИБКА
                 current=current->next;
                 current_OUT=current_OUT->next_out;
             }
             current_OUT=head_OUT;
             while (current_OUT!=NULL)
             {
-                fprintf(output,"(%f) %c (%f)= (%f)",current->peremenai_1,current->deistvie,current->peremenai_2,current_OUT->rez);
+                if (current->type>1)
+                {
+                    fprintf(output,"(");
+                    for (int i=0;i<current->type;i++)
+                    {
+                        fprintf(output,"%f",current->peremenai_1[i]);
+                    }
+                    fprintf(output,")");
+                    fprintf(output," %c ",current->deistvie);
+                    fprintf(output,"(");
+                    for (int i=0;i<current->type;i++)
+                    {
+                        fprintf(output,"%f",current->peremenai_2[i]);
+                    }
+                    fprintf(output,")");
+                    fprintf(output," = ");
+                    fprintf(output,"(");
+                    for (int i=0;i<current->type;i++)
+                    {
+                        fprintf(output,"%f",head_OUT->rez[i]);
+                    }
+                    fprintf(output,")");
+                    fprintf(output,"\n");
+                }
+                else
+                {
+                    fprintf(output,"%f %c %f = %f",current->peremenai_1[0],current->deistvie,current->peremenai_2[0],current_OUT->rez[0]);
+                    fprintf(output,"/n");
+                }
                 current=current->next;
                 current_OUT=current_OUT->next_out;
             }
