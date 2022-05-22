@@ -14,6 +14,25 @@
 #include <stdio.h>
 #include <stdlib.h>
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////СТРУКТУРА ДЛЯ ВВОДА ДАННЫХ////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+typedef struct List_IN
+{
+    int size;
+    char deistvie;
+    float *peremenai_1;
+    float *peremenai_2;
+    struct List_IN *next;
+}List_IN;
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////СТРУКТУРА ДЛЯ ВЫВОДА ДАННЫХ///////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+typedef struct List_OUT
+{
+    float *rez;
+    struct List_OUT *next_out;
+}List_OUT;
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////ФУНКЦИЯ ДЕЙСТВИЯ С ЧИСЛАМИ//////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 float *num(char deistvie,float *peremenai_1, float *peremenai_2)
@@ -54,12 +73,14 @@ float *num(char deistvie,float *peremenai_1, float *peremenai_2)
             return rez;
         case '!'://блок факториала
             rez[0]=1;//приравниваем для того, чтобы посчитать факториал
-            for (float i=0;i<peremenai_1[0];i++)
+            for (float i=1;i<=peremenai_1[0];i++)
             {
-                rez[0]=rez[0]*i;
+            	rez[0]=rez[0]*i;
             }
             return rez;
+
     }
+    printf(" начало цикла ");
     return peremenai_1;
     return peremenai_2;
     free(peremenai_1);
@@ -69,28 +90,28 @@ float *num(char deistvie,float *peremenai_1, float *peremenai_2)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////ФУНКЦИЯ ДЕЙСТВИЯ С ВЕКТОРАМИ////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-float*vector(char deistvie,int type, float *peremenai_1,float *peremenai_2)
+float*vector(char deistvie,int size, float *peremenai_1,float *peremenai_2)
 {
     float *rez;
     switch (deistvie)
     {
         case '+':
-            rez=malloc(type*sizeof(float));
-            for (int i=0;i<type;i++)
+            rez=malloc(size*sizeof(float));
+            for (int i=0;i<size;i++)
             {
                 rez[i]=peremenai_1[i]+peremenai_2[i];
             }
             return rez;
         case '-':
-            rez=malloc(type*sizeof(float));
-            for (int i=0;i<type;i++)
+            rez=malloc(size*sizeof(float));
+            for (int i=0;i<size;i++)
             {
                 rez[i]=peremenai_1[i]-peremenai_2[i];
             }
             return rez;
         case '*':
             rez=malloc(1);
-            for (int i = 0; i<type; i++)
+            for (int i = 0; i<size; i++)
             {
                 rez[0]+=(peremenai_1[i]*peremenai_2[i]);
             }
@@ -103,32 +124,13 @@ float*vector(char deistvie,int type, float *peremenai_1,float *peremenai_2)
     free(rez);
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////СТРУКТУРА ДЛЯ ВВОДА ДАННЫХ////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-typedef struct List_IN
-{
-    int type;
-    char deistvie;
-    float *peremenai_1;
-    float *peremenai_2;
-    struct List_IN *next;
-}List_IN;
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////СТРУКТУРА ДЛЯ ВЫВОДА ДАННЫХ///////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-typedef struct List_OUT
-{
-    float *rez;
-    struct List_OUT *next_out;
-}List_OUT;
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////ФУНКЦИЯ ДЛЯ ДОБАВЛЕНИЯ ЧИСЛА////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-float *addperemenai(FILE *input, int type)
+float *addperemenai(FILE *input, int size)
 {
     float *peremenai;
-    peremenai=malloc(type*sizeof(float));
-    for(int i=0;i<type;i++)
+    peremenai=malloc(size*sizeof(float));
+    for(int i=0;i<size;i++)
     {
         fscanf(input,"%f",&peremenai[i]);
     }
@@ -140,15 +142,15 @@ float *addperemenai(FILE *input, int type)
 void add_el_in(List_IN *current, FILE *input)
 {
     List_IN *tmp=malloc(1*sizeof(List_IN));
-    fscanf(input,"%i %c",&tmp->type,&tmp->deistvie);
+    fscanf(input,"%i %c",&tmp->size,&tmp->deistvie);
     if (tmp->deistvie!='!')
     {
-        tmp->peremenai_1=addperemenai(input,tmp->type);
-        tmp->peremenai_2=addperemenai(input,tmp->type);
+        tmp->peremenai_1=addperemenai(input,tmp->size);
+        tmp->peremenai_2=addperemenai(input,tmp->size);
     }
     else
     {
-        tmp->peremenai_1=addperemenai(input,tmp->type);
+        tmp->peremenai_1=addperemenai(input,tmp->size);
         tmp->peremenai_2=NULL;
     }
     tmp->next=NULL;
@@ -159,17 +161,17 @@ void add_el_in(List_IN *current, FILE *input)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void add_el_out(List_OUT *current_OUT, List_IN *current)
 {
-    List_OUT *tmp=malloc(1*sizeof(List_OUT));
-    if (current->type>1)
+    List_OUT *tmp_res=malloc(1*sizeof(List_OUT));
+    if (current->size!=1)
     {
-        tmp->rez=vector(current->deistvie,current->type,current->peremenai_1,current->peremenai_2);
+        tmp_res->rez=vector(current->deistvie,current->size,current->peremenai_1,current->peremenai_2);
     }
     else
     {
-        tmp->rez=num(current->deistvie,current->peremenai_1,current->peremenai_2);
+        tmp_res->rez=num(current->deistvie,current->peremenai_1,current->peremenai_2);
     }
-    tmp->next_out=NULL;
-    current_OUT->next_out=tmp;
+    tmp_res->next_out=NULL;
+    current_OUT->next_out=tmp_res;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -194,34 +196,34 @@ int main(int argc,char *argv[])
         if (!feof(input))
         {
             head=malloc(1*sizeof(List_IN));
-            fscanf(input, " %i %c",&head->type, &head->deistvie);
+            fscanf(input, " %i %c",&head->size, &head->deistvie);
             if (head->deistvie != '!')
             {
-                head->peremenai_1=addperemenai(input,head->type);
-                head->peremenai_2=addperemenai(input,head->type);
+                head->peremenai_1=addperemenai(input,head->size);
+                head->peremenai_2=addperemenai(input,head->size);
             }
             else
             {
-                head->peremenai_1=addperemenai(input,head->type);
+                head->peremenai_1=addperemenai(input,head->size);
                 head->peremenai_2=NULL;
             }
             current=head;
-            int n;
-            while (feof(input))
+
+            while (!feof(input))
             {
             	add_el_in(current,input);
                 current=current->next;
-                n+=1;
+
             }
             head_OUT=malloc(sizeof(List_OUT));
             current=head;
-            if (current->type==1)
+            if (current->size==1)
             {
                 head_OUT->rez=num(current->deistvie,current->peremenai_1,current->peremenai_2);
             }
             else
             {
-                head_OUT->rez=vector(current->deistvie,current->type,current->peremenai_1,current->peremenai_2);
+                head_OUT->rez=vector(current->deistvie,current->size,current->peremenai_1,current->peremenai_2);
             }
             head_OUT->next_out=NULL;
             current=current->next;
@@ -238,15 +240,15 @@ int main(int argc,char *argv[])
             output=fopen(File_OUT,"w");
             while (current_OUT!=NULL)
             {
-                if (current->type>1)
+                if (current->size>1)
                 {
                     fprintf(output,"( ");
-                    for (int i=0;i<current->type;i++)
+                    for (int i=0;i<current->size;i++)
                     {
                         fprintf(output," %1.f ",current->peremenai_1[i]);
                     }
                     fprintf(output," ) %c ( ",current->deistvie);
-                    for (int i=0;i<current->type;i++)
+                    for (int i=0;i<current->size;i++)
                     {
                         fprintf(output," %1.f ",current->peremenai_2[i]);
                     }
@@ -254,7 +256,7 @@ int main(int argc,char *argv[])
                     if (current->deistvie!='*')
                     {
                         fprintf(output," ( ");
-                        for(int i=0;i<current->type;i++)
+                        for(int i=0;i<current->size;i++)
                         {
                             fprintf(output," %1.f ",current_OUT->rez[i]);
                         }
@@ -266,7 +268,7 @@ int main(int argc,char *argv[])
                     }
 
                 }
-                else if (current->type==1)
+                else if (current->size==1)
                 {
                     fprintf(output," %1.f %c %1.f = %1.f ",current->peremenai_1[0],current->deistvie,current->peremenai_2[0],current_OUT->rez[0]);
                     fprintf(output,"\n");
