@@ -38,6 +38,7 @@ typedef struct List_OUT
 float *num(char deistvie,float *peremenai_1, float *peremenai_2)
 {
     float *rez;
+    float var1;
     rez=malloc(1*sizeof(float));
     switch (deistvie)
     {
@@ -72,15 +73,15 @@ float *num(char deistvie,float *peremenai_1, float *peremenai_2)
             }
             return rez;
         case '!'://блок факториала
-            rez[0]=1;//приравниваем для того, чтобы посчитать факториал
+            var1=1; //приравниваем для того, чтобы посчитать факториал
             for (float i=1;i<=peremenai_1[0];i++)
             {
-            	rez[0]=rez[0]*i;
+            	var1=var1*i;
             }
+            rez[0]=var1;
             return rez;
 
     }
-    printf(" начало цикла ");
     return peremenai_1;
     return peremenai_2;
     free(peremenai_1);
@@ -148,7 +149,7 @@ void add_el_in(List_IN *current, FILE *input)
         tmp->peremenai_1=addperemenai(input,tmp->size);
         tmp->peremenai_2=addperemenai(input,tmp->size);
     }
-    else
+    else if(tmp->deistvie=='!')
     {
         tmp->peremenai_1=addperemenai(input,tmp->size);
         tmp->peremenai_2=NULL;
