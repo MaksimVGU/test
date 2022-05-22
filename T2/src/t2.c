@@ -73,8 +73,9 @@ float *num(char deistvie,float *peremenai_1, float *peremenai_2)
             }
             return rez;
         case '!'://блок факториала
-            var1=1; //приравниваем для того, чтобы посчитать факториал
-            for (float i=1;i<=peremenai_1[0];i++)
+            var1=1;
+            int var2=peremenai_1[0];//приравниваем для того, чтобы посчитать факториал
+            for (int i=1;i<=var2;i++)
             {
             	var1=var1*i;
             }
@@ -216,15 +217,18 @@ int main(int argc,char *argv[])
                 current=current->next;
 
             }
+
             head_OUT=malloc(sizeof(List_OUT));
             current=head;
             if (current->size==1)
             {
                 head_OUT->rez=num(current->deistvie,current->peremenai_1,current->peremenai_2);
+
             }
             else
             {
                 head_OUT->rez=vector(current->deistvie,current->size,current->peremenai_1,current->peremenai_2);
+
             }
             head_OUT->next_out=NULL;
             current=current->next;
@@ -271,8 +275,16 @@ int main(int argc,char *argv[])
                 }
                 else if (current->size==1)
                 {
-                    fprintf(output," %1.f %c %1.f = %1.f ",current->peremenai_1[0],current->deistvie,current->peremenai_2[0],current_OUT->rez[0]);
-                    fprintf(output,"\n");
+                    if (current->deistvie!='!')
+                	{
+                    	fprintf(output," %1.f %c %1.f = %1.f ",current->peremenai_1[0],current->deistvie,current->peremenai_2[0],current_OUT->rez[0]);
+                    	fprintf(output,"\n");
+                	}
+                    else
+                    {
+                    	fprintf(output," %1.f %c = %1.f ",current->peremenai_1[0],current->deistvie,current_OUT->rez[0]);
+                    	fprintf(output,"\n");
+                    }
                 }
                 current=current->next;
                 current_OUT=current_OUT->next_out;
