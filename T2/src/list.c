@@ -7,10 +7,11 @@
 // степень, знак ^
 // факториал, знак !
 // чтобы вернуться в начало программы будем использловать do.. while. Пользователь должен будет ввести y если хочет продолжить работать в калькуляторе или n чтобы прекратить
-// Для работы через файл, надо выбрать режим работы: вектор v калькулятор s
-// далее, для векторонго ввести через пробел размер_вектора координааты_первого_вектора координаты_второго_вектора действие
-// для калькулятора: выбираем_действие вводим_первое_число вводим_второе_число(если не факториал)
-// выбираем, продолжить ли работу
+//Для работы необходимо:В файл для ввода необходимо ввести попорядку
+//числовой режим работы или векторный(1 или более соответственно). далее
+//для векторного вводим координаты по-порядку. для числового нужно ввести
+//число а и число b. Далее ввести название файла для ввода данных и для
+//вывода.
 #include <stdio.h>
 #include <stdlib.h>
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,6 +34,58 @@ typedef struct List_OUT
     struct List_OUT *next_out;
 }List_OUT;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////ФУНКЦИЯ ПЕРЕХОДА В НАЧАЛО СПИСКА////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+List_IN *to_head_in(List_IN *current, List_IN *head)
+{
+    current=head;
+    return current;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////ФУНКЦИЯ ПЕРЕХОДА В НАЧАЛО СПИСКА(out)///////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+List_OUT *to_head_out(List_OUT *current_out, List_OUT *head_out)
+{
+    current_out=head_out;
+    return current_out;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////ФУНКЦИЯ ПЕРЕХОДА НА СЛЕД ЭЛЕМЕНТ////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+List_IN *next_el_in(List_IN *current)
+{
+    List_IN *next_el = current->next;
+    return next_el;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////ФУНКЦИЯ ПЕРЕХОДА НА СЛЕД ЭЛЕМЕНТ(OUT)///////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+List_OUT *next_el_out(List_OUT *current)
+{
+    List_OUT *next_el = current->next_out;
+    return next_el;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////ФУНКЦИЯ УДАЛЕНЯИ ЭЛЕМЕНТА///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+List_IN *del_in(List_IN *current)
+{
+    List_IN *del=current;
+    current=next_el_in(current);
+    free(del);
+    return current;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////ФУНКЦИЯ УДАЛЕНЯИ ЭЛЕМЕНТА(OUT)//////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+List_OUT *del_out(List_OUT *current)
+{
+    List_OUT *del=current;
+    current=current->next_out;
+    free(del);
+    return current;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////ФУНКЦИЯ ДЕЙСТВИЯ С ЧИСЛАМИ//////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 float *num(char deistvie,float *peremenai_1, float *peremenai_2)
@@ -44,16 +97,16 @@ float *num(char deistvie,float *peremenai_1, float *peremenai_2)
     {
         case '+'://блок суммы
             rez[0]=peremenai_1[0]+peremenai_2[0];
-            return rez;
+            break;
         case '-'://блок разности
             rez[0]=peremenai_1[0]-peremenai_2[0];
-            return rez;
+            break;
         case '*'://блок умножения
             rez[0]=peremenai_1[0]*peremenai_2[0];
-            return rez;
+            break;
         case '/'://блок деления
             rez[0]=peremenai_1[0]/peremenai_2[0];
-            return rez;
+            break;
         case '^': //блок степени
             rez[0]=peremenai_1[0];//приравниваем для того, чтобы посчитать степень
             if (peremenai_2[0]==0)
@@ -71,7 +124,7 @@ float *num(char deistvie,float *peremenai_1, float *peremenai_2)
                     rez[0]*=peremenai_1[0];
                 }
             }
-            return rez;
+            break;
         case '!'://блок факториала
             var1=1;
             int var2=peremenai_1[0];//приравниваем для того, чтобы посчитать факториал
@@ -80,14 +133,10 @@ float *num(char deistvie,float *peremenai_1, float *peremenai_2)
             	var1=var1*i;
             }
             rez[0]=var1;
-            return rez;
+            break;
 
     }
-    return peremenai_1;
-    return peremenai_2;
-    free(peremenai_1);
-    free(peremenai_2);
-    free(rez);
+    return rez;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////ФУНКЦИЯ ДЕЙСТВИЯ С ВЕКТОРАМИ////////////////////////////////////////////////
@@ -97,33 +146,29 @@ float*vector(char deistvie,int size, float *peremenai_1,float *peremenai_2)
     float *rez;
     switch (deistvie)
     {
-        case '+':
+        case '+'://блок суммы
             rez=malloc(size*sizeof(float));
             for (int i=0;i<size;i++)
             {
                 rez[i]=peremenai_1[i]+peremenai_2[i];
             }
-            return rez;
-        case '-':
+            break;
+        case '-'://блок разности
             rez=malloc(size*sizeof(float));
             for (int i=0;i<size;i++)
             {
                 rez[i]=peremenai_1[i]-peremenai_2[i];
             }
-            return rez;
-        case '*':
+            break;
+        case '*'://блок умножние
             rez=malloc(1);
             for (int i = 0; i<size; i++)
             {
                 rez[0]+=(peremenai_1[i]*peremenai_2[i]);
             }
-            return rez;
+            break;
     }
-    return peremenai_1;
-    return peremenai_2;
-    free(peremenai_1);
-    free(peremenai_2);
-    free(rez);
+    return rez;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////ФУНКЦИЯ ДЛЯ ДОБАВЛЕНИЯ ЧИСЛА////////////////////////////////////////////////
@@ -195,7 +240,7 @@ int main(int argc,char *argv[])
         printf("Введите куда записать\n");
         scanf("%s",File_OUT);
         input=fopen(File_IN,"r");
-        if (!feof(input))
+        if (!feof(input))//добавляем головной элемент ввода
         {
             head=malloc(1*sizeof(List_IN));
             fscanf(input, " %i %c",&head->size, &head->deistvie);
@@ -209,17 +254,16 @@ int main(int argc,char *argv[])
                 head->peremenai_1=addperemenai(input,head->size);
                 head->peremenai_2=NULL;
             }
-            current=head;
-
+            current=to_head_in(current,head);
             while (!feof(input))
             {
             	add_el_in(current,input);
-                current=current->next;
+                current=next_el_in(current);
 
             }
 
             head_OUT=malloc(sizeof(List_OUT));
-            current=head;
+            current=to_head_in(current,head);
             if (current->size==1)
             {
                 head_OUT->rez=num(current->deistvie,current->peremenai_1,current->peremenai_2);
@@ -231,16 +275,16 @@ int main(int argc,char *argv[])
 
             }
             head_OUT->next_out=NULL;
-            current=current->next;
-            current_OUT=head_OUT;
+            current=next_el_in(current);
+            current_OUT=to_head_out(current_OUT,head_OUT);
             while (current!=NULL)
             {
                 add_el_out(current_OUT,current);
-                current=current->next;
-                current_OUT=current_OUT->next_out;
+                current=next_el_in(current);
+                current_OUT=next_el_out(current_OUT);
             }
-            current=head;
-            current_OUT=head_OUT;
+            current=to_head_in(current,head);
+            current_OUT=to_head_out(current_OUT,head_OUT);
             fclose(input);
             output=fopen(File_OUT,"w");
             while (current_OUT!=NULL)
@@ -250,12 +294,12 @@ int main(int argc,char *argv[])
                     fprintf(output,"( ");
                     for (int i=0;i<current->size;i++)
                     {
-                        fprintf(output," %1.f ",current->peremenai_1[i]);
+                        fprintf(output," %0.01f ",current->peremenai_1[i]);
                     }
                     fprintf(output," ) %c ( ",current->deistvie);
                     for (int i=0;i<current->size;i++)
                     {
-                        fprintf(output," %1.f ",current->peremenai_2[i]);
+                        fprintf(output," %0.01f ",current->peremenai_2[i]);
                     }
                     fprintf(output," ) = ");
                     if (current->deistvie!='*')
@@ -263,13 +307,13 @@ int main(int argc,char *argv[])
                         fprintf(output," ( ");
                         for(int i=0;i<current->size;i++)
                         {
-                            fprintf(output," %1.f ",current_OUT->rez[i]);
+                            fprintf(output," %0.01f ",current_OUT->rez[i]);
                         }
                         fprintf(output,")\n");
                     }
                     else
                     {
-                        fprintf(output," %1.f\n",current_OUT->rez[0]);
+                        fprintf(output," %0.01f\n",current_OUT->rez[0]);
                     }
 
                 }
@@ -277,17 +321,17 @@ int main(int argc,char *argv[])
                 {
                     if (current->deistvie!='!')
                 	{
-                    	fprintf(output," %1.f %c %1.f = %1.f ",current->peremenai_1[0],current->deistvie,current->peremenai_2[0],current_OUT->rez[0]);
+                    	fprintf(output," %0.01f %c %0.01f = %0.01f ",current->peremenai_1[0],current->deistvie,current->peremenai_2[0],current_OUT->rez[0]);
                     	fprintf(output,"\n");
                 	}
                     else
                     {
-                    	fprintf(output," %1.f %c = %1.f ",current->peremenai_1[0],current->deistvie,current_OUT->rez[0]);
+                    	fprintf(output," %0.01f %c = %0.01f ",current->peremenai_1[0],current->deistvie,current_OUT->rez[0]);
                     	fprintf(output,"\n");
                     }
                 }
-                current=current->next;
-                current_OUT=current_OUT->next_out;
+                current=del_in(current);
+                current_OUT=del_out(current_OUT);
             }
             fclose(output);
         }
