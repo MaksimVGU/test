@@ -177,11 +177,11 @@ void add_el_in(FILE *input)
 void add_el_out(QUEUE_OUT *head_OUT, QUEUE_IN *head_in)
 {
     QUEUE_OUT *tmp_res=malloc(1*sizeof(QUEUE_OUT));
-    if (head_in->size!=1)
+    if (head_in->size>1)
     {
         tmp_res->rez=vector(head_in->deistvie,head_in->size,head_in->peremenai_1,head_in->peremenai_2);
     }
-    else
+    else if (head_in->size==1)
     {
         tmp_res->rez=num(head_in->deistvie,head_in->peremenai_1,head_in->peremenai_2);
     }
@@ -227,23 +227,20 @@ int main(int argc,char *argv[])
             output=fopen(File_OUT,"w");
             while (cont!=0)
             {
-                add_el_out(head_out,head_in);
+            	add_el_out(head_out,head_in);
                 cont--;
             }
-            printf("перед закрытием");
-            fclose(output);
-            printf("перед закрытием");
             while (head_in!=NULL)
             {
-                if (head_in->size!=1)
+                if (head_in->size>1)
                 {
                     fprintf(output," ( ");
                     for (int i=0;i<head_in->size;i++)
                     {
-                        fprintf(output,"%1.f", head_in->peremenai_1[i]);
+                        fprintf(output," %1.f ", head_in->peremenai_1[i]);
                     }
                     fprintf(output," ) ");
-                    fprintf(output,"%c",head_in->deistvie);
+                    fprintf(output," %c ",head_in->deistvie);
                     fprintf(output," ( ");
                     for (int i=0;i<head_in->size;i++)
                     {
@@ -258,15 +255,15 @@ int main(int argc,char *argv[])
                     }
                     fprintf(output," ) \n");
                 }
-                else
+                else if (head_in->size==1)
                 {
                     if(head_in->deistvie!='!')
                     {
-                        fprintf(output," %1.f %c %1.f = %1.f ",head_in->peremenai_1[0],head_in->deistvie,head_in->peremenai_2[0],head_out->rez[0]);
+                        fprintf(output," %1.f %c %1.f = %1.f \n",head_in->peremenai_1[0],head_in->deistvie,head_in->peremenai_2[0],head_out->rez[0]);
                     }
                     else
                     {
-                        fprintf(output," %1.f %c = %1.f ",head_in->peremenai_1[0],head_in->deistvie,head_out->rez[0]);
+                        fprintf(output," %1.f %c = %1.f \n",head_in->peremenai_1[0],head_in->deistvie,head_out->rez[0]);
                     }
                 }
                 QUEUE_IN *to_del_in=head_in;
@@ -276,6 +273,7 @@ int main(int argc,char *argv[])
                 free(to_del_in);
                 free(to_del_out);
             }
+            fclose(output);
         }
         printf("продолжить? \n");
         scanf(" %c", &end);
