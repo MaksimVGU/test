@@ -218,7 +218,7 @@ int main(int argc,char *argv[])
         input=fopen(File_IN,"r");
         if (!feof(input))
         {
-            while(!feof(input))
+            while(!feof(input))//ТУТ ПРОБЛЕМА, НЕ ВЫХОДИТ ИЗ ЦИКЛА
             {
                 add_el_in(input);
                 cont++;
