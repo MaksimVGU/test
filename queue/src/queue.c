@@ -268,12 +268,29 @@ int main(int argc,char *argv[])
             	fscanf(input," %c",&d);
             	if(d != '!')
             	{
-            		p_1=addperemenai(input,s);
-            		p_2=addperemenai(input,s);
+            		p_1=malloc(s*sizeof(float));
+            		for(int i=0;i<s;i++)
+            		{
+            			fscanf(input," %f",&p_1[i]);
+            		}
+            		p_2=malloc(s*sizeof(float));
+            		for(int i=0;i<s;i++)
+            		{
+            			fscanf(input," %f",&p_2[i]);
+            		}
             	}
             	else
             	{
-            		p_1=addperemenai(input,s);
+            		p_1=malloc(s*sizeof(float));
+            		for(int i=0;i<s;i++)
+            		{
+            			fscanf(input," %f",&p_1[i]);
+            		}
+            		p_2=malloc(s*sizeof(float));
+            		for(int i=0;i<s;i++)
+            		{
+            			fscanf(input," %f",&p_1[i]);
+            		}
             		p_2=NULL;
             	}
             	for (int i=0;i<s;i++) //ПРОВЕРКА р_1(ПРОВЕРКА ПРОЙДЕНА,ВСЕ ВЕРНО)
