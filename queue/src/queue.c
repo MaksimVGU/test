@@ -170,25 +170,26 @@ float *addperemenai(FILE *input, int size)
     peremenai=malloc(size*sizeof(float));
     for(int i=0;i<size;i++)
     {
-        fscanf(input,"%f",&peremenai[i]);
+        fscanf(input," %f",&peremenai[i]);
     }
     return peremenai;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////ФУНКЦИЯ ДЛЯ ДОБАВЛЕНИЯ ЭЛЕМЕНТА ВВОДА///////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void add_el_in(FILE *input)
+void add_el_in(float *p_1, char d, float *p_2, int s)
 {
 		QUEUE_IN *tmp=malloc(1*sizeof(QUEUE_IN));
-		fscanf(input,"%i %c",&tmp->size,&tmp->deistvie);
-		if (tmp->deistvie!='!')
+		tmp->deistvie=d;
+		tmp->size=s;
+		if (d !='!')
 		{
-			tmp->peremenai_1=addperemenai(input,tmp->size);
-			tmp->peremenai_2=addperemenai(input,tmp->size);
+			tmp->peremenai_1=p_1;
+			tmp->peremenai_2=p_2;
 		}
 		else
 		{
-			tmp->peremenai_1=addperemenai(input,tmp->size);
+			tmp->peremenai_1=p_1;
 			tmp->peremenai_2=NULL;
 		}
 		tmp->next_in=NULL;
@@ -243,7 +244,7 @@ void add_el_out(QUEUE_OUT *head_OUT, QUEUE_IN *head_in)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 int main(int argc,char *argv[])
 {
-	char end='y';
+ 	char end='y';
     setvbuf(stdout, NULL, _IONBF, 0);
     setvbuf(stderr, NULL, _IONBF, 0);
     FILE *input,*output;
@@ -260,7 +261,48 @@ int main(int argc,char *argv[])
         {
             while(!feof(input))
             {
-                add_el_in(input);
+            	float *p_1,*p_2;
+            	char d;
+            	int s;
+            	fscanf(input," %i",&s);
+            	fscanf(input," %c",&d);
+            	if(d != '!')
+            	{
+            		p_1=addperemenai(input,s);
+            		p_2=addperemenai(input,s);
+            	}
+            	else
+            	{
+            		p_1=addperemenai(input,s);
+            		p_2=NULL;
+            	}
+            	for (int i=0;i<s;i++) //ПРОВЕРКА р_1(ПРОВЕРКА ПРОЙДЕНА,ВСЕ ВЕРНО)
+            	{
+            		printf("%f ",p_1[i]);
+            	}
+            	printf("\n");
+
+            	if (d!='!')//ПРОВЕРКА р_2(ПРОВЕРКА ПРОЙДЕНА,ВСЕ ВЕРНО)
+        			{
+        				for (int i=0;i<s;i++)
+        		        {
+        					printf("%f ",p_2[i]);
+        	        		printf("\n");
+        		        }
+        			}
+                add_el_in(p_1, d , p_2 , s);
+                free(p_1);
+                free(p_2);
+                printf("\n ERR \n");
+            }
+
+            while(head_in!=NULL)
+            {
+            	printf(" %i ", head_in->size);
+            	printf(" %c ", head_in->deistvie);
+            	printf(" %f ", head_in->peremenai_1[0]);
+            	printf(" %f \n", head_in->peremenai_2[0]);
+            	head_in=del_in(head_in); // ПРОБЛЕМА С ВЫВОДОМ переменных, не те значения;
             }
             fclose(input);
             output=fopen(File_OUT,"w");
@@ -307,6 +349,8 @@ int main(int argc,char *argv[])
                 }
                 head_out=del_out(head_out);
             }
+            printf(" %c \n",tail_in->deistvie);
+            printf(" %c \n",tail_out->deistvie);
             fclose(output);
         }
         printf("продолжить? \n");
