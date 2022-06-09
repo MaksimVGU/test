@@ -1,12 +1,10 @@
 #include "list.h"
 #include "queue.h"
 #include "rez.h"
-
 QUEUE_IN *head_in_queue=NULL;
 QUEUE_IN *tail_in_queue=NULL;
 QUEUE_OUT *head_out_queue=NULL;
 QUEUE_OUT *tail_out_queue=NULL;
-
 int main(int argc,char *argv[])
 {
     setvbuf(stdout, NULL, _IONBF, 0);
@@ -234,5 +232,6 @@ int main(int argc,char *argv[])
     }
     return 0;
 }
+
 
 
