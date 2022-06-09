@@ -1,4 +1,5 @@
 #include "list.h"
+#include"rez.h"
 #include <stdio.h>
 #include <stdlib.h>
 List_IN *to_head_in(List_IN *current, List_IN *head)
@@ -50,91 +51,7 @@ List_OUT *del_out(List_OUT *current)
     free(del);
     return current;
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////ФУНКЦИЯ ДЕЙСТВИЯ С ЧИСЛАМИ//////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-float *num(char deistvie,float *peremenai_1, float *peremenai_2)
-{
-    float *rez;
-    float var1;
-    rez=malloc(1*sizeof(float));
-    switch (deistvie)
-    {
-        case '+'://блок суммы
-            rez[0]=peremenai_1[0]+peremenai_2[0];
-            break;
-        case '-'://блок разности
-            rez[0]=peremenai_1[0]-peremenai_2[0];
-            break;
-        case '*'://блок умножения
-            rez[0]=peremenai_1[0]*peremenai_2[0];
-            break;
-        case '/'://блок деления
-            rez[0]=peremenai_1[0]/peremenai_2[0];
-            break;
-        case '^': //блок степени
-            rez[0]=peremenai_1[0];//приравниваем для того, чтобы посчитать степень
-            if (peremenai_2[0]==0)
-            {
-                rez[0]=1;
-            }
-            else if (peremenai_2[0]==1)
-            {
-                rez[0]=peremenai_1[0];
-            }
-            else
-            {
-                for (float i=1;i<peremenai_2[0];i++)
-                {
-                    rez[0]*=peremenai_1[0];
-                }
-            }
-            break;
-        case '!'://блок факториала
-            var1=1;
-            int var2=peremenai_1[0];//приравниваем для того, чтобы посчитать факториал
-            for (int i=1;i<=var2;i++)
-            {
-            	var1=var1*i;
-            }
-            rez[0]=var1;
-            break;
 
-    }
-    return rez;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////ФУНКЦИЯ ДЕЙСТВИЯ С ВЕКТОРАМИ////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-float*vector(char deistvie,int size, float *peremenai_1,float *peremenai_2)
-{
-    float *rez;
-    switch (deistvie)
-    {
-        case '+'://блок суммы
-            rez=malloc(size*sizeof(float));
-            for (int i=0;i<size;i++)
-            {
-                rez[i]=peremenai_1[i]+peremenai_2[i];
-            }
-            break;
-        case '-'://блок разности
-            rez=malloc(size*sizeof(float));
-            for (int i=0;i<size;i++)
-            {
-                rez[i]=peremenai_1[i]-peremenai_2[i];
-            }
-            break;
-        case '*'://блок умножние
-            rez=malloc(1);
-            for (int i = 0; i<size; i++)
-            {
-                rez[0]+=(peremenai_1[i]*peremenai_2[i]);
-            }
-            break;
-    }
-    return rez;
-}
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////ФУНКЦИЯ ДЛЯ ДОБАВЛЕНИЯ ЧИСЛА////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
