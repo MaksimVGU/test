@@ -162,19 +162,6 @@ float*vector(char deistvie,int size, float *peremenai_1,float *peremenai_2)
     return rez;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////ФУНКЦИЯ ДЛЯ ДОБАВЛЕНИЯ ЧИСЛА////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-float *addperemenai(FILE *input, int size)
-{
-    float *peremenai;
-    peremenai=malloc(size*sizeof(float));
-    for(int i=0;i<size;i++)
-    {
-        fscanf(input," %f",&peremenai[i]);
-    }
-    return peremenai;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////ФУНКЦИЯ ДЛЯ ДОБАВЛЕНИЯ ЭЛЕМЕНТА ВВОДА///////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void add_el_in(float *p_1, char d, float *p_2, int s)
@@ -252,6 +239,9 @@ int main(int argc,char *argv[])
     char File_OUT[259];
     while(end!='n')
     {
+    	float *p_1,*p_2;
+    	char d;
+    	int s;
         printf("Введите откуда читать\n");
         scanf("%s",File_IN);
         printf("Введите куда записать\n");
@@ -261,19 +251,16 @@ int main(int argc,char *argv[])
         {
             while(!feof(input))
             {
-            	float *p_1,*p_2;
-            	char d;
-            	int s;
             	fscanf(input," %i",&s);
             	fscanf(input," %c",&d);
+            	p_1=malloc(s*sizeof(float));
+            	p_2=malloc(s*sizeof(float));
             	if(d != '!')
             	{
-            		p_1=malloc(s*sizeof(float));
             		for(int i=0;i<s;i++)
             		{
             			fscanf(input," %f",&p_1[i]);
             		}
-            		p_2=malloc(s*sizeof(float));
             		for(int i=0;i<s;i++)
             		{
             			fscanf(input," %f",&p_2[i]);
@@ -281,45 +268,12 @@ int main(int argc,char *argv[])
             	}
             	else
             	{
-            		p_1=malloc(s*sizeof(float));
             		for(int i=0;i<s;i++)
             		{
             			fscanf(input," %f",&p_1[i]);
             		}
-            		p_2=malloc(s*sizeof(float));
-            		for(int i=0;i<s;i++)
-            		{
-            			fscanf(input," %f",&p_1[i]);
-            		}
-            		p_2=NULL;
             	}
-            	for (int i=0;i<s;i++) //ПРОВЕРКА р_1(ПРОВЕРКА ПРОЙДЕНА,ВСЕ ВЕРНО)
-            	{
-            		printf("%f ",p_1[i]);
-            	}
-            	printf("\n");
-
-            	if (d!='!')//ПРОВЕРКА р_2(ПРОВЕРКА ПРОЙДЕНА,ВСЕ ВЕРНО)
-        			{
-        				for (int i=0;i<s;i++)
-        		        {
-        					printf("%f ",p_2[i]);
-        	        		printf("\n");
-        		        }
-        			}
                 add_el_in(p_1, d , p_2 , s);
-                free(p_1);
-                free(p_2);
-                printf("\n ERR \n");
-            }
-
-            while(head_in!=NULL)
-            {
-            	printf(" %i ", head_in->size);
-            	printf(" %c ", head_in->deistvie);
-            	printf(" %f ", head_in->peremenai_1[0]);
-            	printf(" %f \n", head_in->peremenai_2[0]);
-            	head_in=del_in(head_in); // ПРОБЛЕМА С ВЫВОДОМ переменных, не те значения;
             }
             fclose(input);
             output=fopen(File_OUT,"w");
@@ -347,28 +301,38 @@ int main(int argc,char *argv[])
                     fprintf(output," ) ");
                     fprintf(output," = ");
                     fprintf(output," ( ");
-                    for (int i=0;i<head_out->size;i++)
+                    if(head_out->deistvie != '*')
                     {
-                        fprintf(output," %1.f ", head_out->rez[i]);
-                    }
-                    fprintf(output," ) \n");
-                }
-                else if (head_out->size==1)
-                {
-                    if(head_out->deistvie!='!')
-                    {
-                        fprintf(output," %1.f %c %1.f = %1.f \n",head_out->peremenai_1[0],head_out->deistvie,head_out->peremenai_2[0],head_out->rez[0]);
+                    	for (int i=0;i<head_out->size;i++)
+                    	{
+                    		fprintf(output," %0.1f ", head_out->rez[i]);
+                    	}
                     }
                     else
                     {
-                        fprintf(output," %1.f %c = %1.f \n",head_out->peremenai_1[0],head_out->deistvie,head_out->rez[0]);
+                    	fprintf(output," %0.1f ", head_out->rez[0]);
+                    }
+
+                    fprintf(output," )\n");
+                }
+                else if (head_out->size==1)
+                {
+                    if(head_out->deistvie != '!')
+                    {
+                        fprintf(output," %0.1f %c %f = %0.1f \n",head_out->peremenai_1[0],head_out->deistvie,head_out->peremenai_2[0],head_out->rez[0]);
+                    }
+                    else
+                    {
+                        fprintf(output," %0.1f %c = %0.1f \n",head_out->peremenai_1[0],head_out->deistvie,head_out->rez[0]);
                     }
                 }
                 head_out=del_out(head_out);
             }
-            printf(" %c \n",tail_in->deistvie);
-            printf(" %c \n",tail_out->deistvie);
             fclose(output);
+            tail_in=NULL;
+            tail_out=NULL;
+            free(p_1);
+            free(p_2);
         }
         printf("продолжить? \n");
         scanf(" %c", &end);
