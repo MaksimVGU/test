@@ -18,10 +18,9 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 typedef struct STACK_IN
 {
-    int size;
-    char deistvie;
     float *peremenai_1;
     float *peremenai_2;
+    char deistvie;
     struct STACK_IN *next_in;
 }STACK_IN;
 STACK_IN *head_in_stack=NULL;
@@ -30,9 +29,8 @@ STACK_IN *head_in_stack=NULL;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 typedef struct STACK_OUT
 {
-    int size;
-    char deistvie;
     float *peremenai_1;
+    char deistvie;
     float *peremenai_2;
     float *rez;
     struct STACK_OUT *next_out;
@@ -41,7 +39,7 @@ STACK_OUT *head_out_stack=NULL;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////ФУНКЦИЯ ПЕРЕХОДА НА СЛЕД ЭЛЕМЕНТ////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-STACK_IN *next_el_in(STACK_IN *current)
+STACK_IN *next_el_in_stack(STACK_IN *current)
 {
     STACK_IN *next_el = current->next_in;
     return next_el;
@@ -49,7 +47,7 @@ STACK_IN *next_el_in(STACK_IN *current)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////ФУНКЦИЯ ПЕРЕХОДА НА СЛЕД ЭЛЕМЕНТ(OUT)///////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-STACK_OUT *next_el_out(STACK_OUT *current)
+STACK_OUT *next_el_out_stack(STACK_OUT *current)
 {
     STACK_OUT *next_el = current->next_out;
     return next_el;
@@ -60,7 +58,7 @@ STACK_OUT *next_el_out(STACK_OUT *current)
 STACK_IN *del_in_stack(STACK_IN *current)
 {
     STACK_IN *del=current;
-    current=next_el_in(current);
+    current=next_el_in_stack(current);
     free(del);
     return current;
 }
@@ -128,44 +126,11 @@ float *num(char deistvie,float *peremenai_1, float *peremenai_2)
     return rez;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////ФУНКЦИЯ ДЕЙСТВИЯ С ВЕКТОРАМИ////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-float *vector(char deistvie,int size, float *peremenai_1,float *peremenai_2)
-{
-    float *rez;
-    switch (deistvie)
-    {
-        case '+'://блок суммы
-            rez=malloc(size*sizeof(float));
-            for (int i=0;i<size;i++)
-            {
-                rez[i]=peremenai_1[i]+peremenai_2[i];
-            }
-            break;
-        case '-'://блок разности
-            rez=malloc(size*sizeof(float));
-            for (int i=0;i<size;i++)
-            {
-                rez[i]=peremenai_1[i]-peremenai_2[i];
-            }
-            break;
-        case '*'://блок умножние
-            rez=malloc(1);
-            for (int i = 0; i<size; i++)
-            {
-                rez[0]+=(peremenai_1[i]*peremenai_2[i]);
-            }
-            break;
-    }
-    return rez;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////ФУНКЦИЯ ДЛЯ ДОБАВЛЕНИЯ ЭЛЕМЕНТА ВВОДА///////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void add_el_in_stack(int s, float *p_1, float *p_2, char d)
+void add_el_in_stack(float *p_1, float *p_2, char d)
 {
     STACK_IN *tmp=malloc(1*sizeof(STACK_IN));
-	tmp->size=s;
 	if (d !='!')
 	{
 		tmp->peremenai_1=p_1;
@@ -194,7 +159,6 @@ void add_el_in_stack(int s, float *p_1, float *p_2, char d)
 void add_el_out_stack(STACK_IN *head_in_stack,float *rez)
 {
     STACK_OUT *tmp=malloc(1*sizeof(STACK_OUT));
-	tmp->size=head_in_stack->size;
 	if (head_in_stack->deistvie !='!')
 	{
 		tmp->peremenai_1=head_in_stack->peremenai_1;
@@ -231,10 +195,9 @@ int main(int argc,char *argv[])
     char File_OUT[259];
     while(end!='n')
     {
-    	float *p_1,*p_2;
+    	float *p1,*p2;
     	float *rez;
     	char d;
-    	int s;
     	int chet_2=0;
         printf("Введите откуда читать\n");
         scanf("%s",File_IN);
@@ -246,98 +209,40 @@ int main(int argc,char *argv[])
 
             while(!feof(input))
             {
-                fscanf(input," %i",&s);
-            	p_1=malloc(s*sizeof(float));
-            	p_2=malloc(s*sizeof(float));
-            	if(d != '!')
-            	{
-            		for(int i=0;i<s;i++)
-            		{
-            			fscanf(input," %f",&p_1[i]);
-            		}
-            		for(int i=0;i<s;i++)
-            		{
-            			fscanf(input," %f",&p_2[i]);
-            		}
-            	}
-            	else
-            	{
-            		for(int i=0;i<s;i++)
-            		{
-            			fscanf(input," %f",&p_1[i]);
-            		}
-            	}
+            	p1=malloc(1*sizeof(float));
+            	p2=malloc(1*sizeof(float));
+            	fscanf(input," %f",&p1[0]);
+            	fscanf(input," %f",&p2[0]);
                 fscanf(input," %c",&d);
-                add_el_in_stack(s, p_1, p_2, d);
+                add_el_in_stack(p1, p2, d);
                 chet_2++;
             }
             fclose(input);
             output=fopen(File_OUT,"w");
             while (head_in_stack != NULL)
             {
-            	if(head_in_stack->size==1)
-            	{
-            		rez=num(head_in_stack->deistvie,head_in_stack->peremenai_1,head_in_stack->peremenai_2);
-            	}
-            	else
-            	{
-            		rez=vector(head_in_stack->deistvie,head_in_stack->size,head_in_stack->peremenai_1,head_in_stack->peremenai_2);
-            	}
+                rez=num(head_in_stack->deistvie,head_in_stack->peremenai_1,head_in_stack->peremenai_2);
             	add_el_out_stack(head_in_stack,rez);
             	head_in_stack=del_in_stack(head_in_stack);
             }
             while (chet_2 != 1)
             {
-                    if (head_out_stack->size>1)
-                    {
-                        fprintf(output," ( ");
-                        for (int i=0;i<head_out_stack->size;i++)
-                        {
-                            fprintf(output," %0.1f ", head_out_stack->peremenai_1[i]);
-                        }
-                        fprintf(output," ) ");
-                        fprintf(output,"%c",head_out_stack->deistvie);
-                        fprintf(output," ( ");
-                        for (int i=0;i<head_out_stack->size;i++)
-                        {
-                            fprintf(output," %0.1f ", head_out_stack->peremenai_2[i]);
-                        }
-                        fprintf(output," ) ");
-                        fprintf(output," = ");
-                        fprintf(output," ( ");
-                        if(head_out_stack->deistvie != '*')
-                        {
-                            for (int i=0;i<head_out_stack->size;i++)
-                            {
-                                fprintf(output," %0.1f ", head_out_stack->rez[i]);
-                            }
-                        }
-                        else
-                        {
-                            fprintf(output," %0.1f ", head_out_stack->rez[0]);
-                        }
-
-                        fprintf(output," )\n");
-                    }
-                    else if (head_out_stack->size==1)
-                    {
-                        if(head_out_stack->deistvie != '!')
-                        {
-                            fprintf(output," %0.1f %c %0.1f = %0.1f \n",head_out_stack->peremenai_1[0],head_out_stack->deistvie,head_out_stack->peremenai_2[0],head_out_stack->rez[0]);
-                        }
-                        else
-                        {
-                            fprintf(output," %0.1f %c = %0.1f \n",head_out_stack->peremenai_1[0],head_out_stack->deistvie,head_out_stack->rez[0]);
-                        }
-                    }
-                    head_out_stack=del_out_stack(head_out_stack);
-                    chet_2--;
+                if(head_out_stack->deistvie != '!')
+                {
+                    fprintf(output," %0.1f %c %0.1f = %0.1f \n",head_out_stack->peremenai_1[0],head_out_stack->deistvie,head_out_stack->peremenai_2[0],head_out_stack->rez[0]);
+                }
+                else
+                {
+                    fprintf(output," %0.1f %c = %0.1f \n",head_out_stack->peremenai_1[0],head_out_stack->deistvie,head_out_stack->rez[0]);
+                }
+                head_out_stack=del_out_stack(head_out_stack);
+                chet_2--;
             }
             head_out_stack=del_out_stack(head_out_stack);
             fclose(output);
             free(rez);
-            free(p_1);
-            free(p_2);
+            free(p1);
+            free(p2);
         }
         printf("продолжить? \n");
         scanf(" %c", &end);
