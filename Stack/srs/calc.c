@@ -333,6 +333,7 @@ int main(int argc,char *argv[])
                     head_out_stack=del_out_stack(head_out_stack);
                     chet_2--;
             }
+            head_out_stack=del_out_stack(head_out_stack);
             fclose(output);
             free(rez);
             free(p_1);
