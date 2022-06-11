@@ -232,6 +232,7 @@ void add_el_out_queue(QUEUE_OUT *head_OUT, QUEUE_IN *head_in)
 int main(int argc,char *argv[])
 {
  	char end='y';
+ 	int chet_queue=0;
     setvbuf(stdout, NULL, _IONBF, 0);
     setvbuf(stderr, NULL, _IONBF, 0);
     FILE *input,*output;
@@ -281,8 +282,9 @@ int main(int argc,char *argv[])
             {
             	add_el_out_queue(head_out_queue,head_in_queue);
                 head_in_queue=del_in_queue(head_in_queue);
+                chet_queue++;
             }
-            while (head_out_queue!=NULL)
+            while (chet_queue != 1)
             {
                 if (head_out_queue->size>1)
                 {
@@ -327,7 +329,9 @@ int main(int argc,char *argv[])
                     }
                 }
                 head_out_queue=del_out_queue(head_out_queue);
+                chet_queue--;
             }
+            head_out_queue=del_out_queue(head_out_queue);
             fclose(output);
             tail_in_queue=NULL;
             tail_out_queue=NULL;
