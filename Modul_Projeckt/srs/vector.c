@@ -1,6 +1,6 @@
-#include "vector.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "vector.h"
 
 float*vector(char deistvie,int size, float *peremenai_1,float *peremenai_2) 	//ФУНКЦИЯ ДЕЙСТВИЯ С ВЕКТОРАМИ
 {

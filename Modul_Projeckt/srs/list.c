@@ -1,9 +1,10 @@
 #include "list.h"
-
+#include "num.h"
+#include "vector.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "num.h"
+
 
 List_IN *to_head_in(List_IN *current, List_IN *head)
 {

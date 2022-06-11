@@ -1,6 +1,6 @@
-#include "num.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "num.h"
 
 float *num(char deistvie,float *peremenai_1, float *peremenai_2)	//ФУНКЦИЯ ДЕЙСТВИЯ С ЧИСЛАМИ
 {
