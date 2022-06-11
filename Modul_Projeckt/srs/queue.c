@@ -42,7 +42,7 @@ QUEUE_OUT *del_out_queue(QUEUE_OUT *current)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////ФУНКЦИЯ ДЛЯ ДОБАВЛЕНИЯ ЭЛЕМЕНТА ВВОДА///////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void add_el_in_queue(float *p_1, char d, float *p_2, int s, QUEUE_IN *tail_in_queue, QUEUE_IN *head_in_queue)
+QUEUE_IN *add_el_in_queue(float *p_1, char d, float *p_2, int s)
 {
 		QUEUE_IN *tmp=malloc(1*sizeof(QUEUE_IN));
 		tmp->deistvie=d;
@@ -58,21 +58,12 @@ void add_el_in_queue(float *p_1, char d, float *p_2, int s, QUEUE_IN *tail_in_qu
 			tmp->peremenai_2=NULL;
 		}
 		tmp->next_in=NULL;
-		if (tail_in_queue != NULL)
-		{
-			tail_in_queue->next_in=tmp;
-			tail_in_queue=tmp;
-		}
-		else
-		{
-			head_in_queue=tmp;
-			tail_in_queue=tmp;
-		}
+		return tmp;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////ФУНКЦИЯ ДЛЯ ДОБАВЛЕНИЯ ЭЛЕМЕНТА ВЫВОДА//////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void add_el_out_queue(QUEUE_OUT *head_out_queue, QUEUE_IN *head_in_queue, QUEUE_OUT *tail_out_queue)
+QUEUE_OUT *add_el_out_queue(QUEUE_IN *head_in_queue)
 {
     QUEUE_OUT *tmp_res=malloc(1*sizeof(QUEUE_OUT));
     if (head_in_queue->size>1)
@@ -92,14 +83,5 @@ void add_el_out_queue(QUEUE_OUT *head_out_queue, QUEUE_IN *head_in_queue, QUEUE_
         tmp_res->rez=num(head_in_queue->deistvie,head_in_queue->peremenai_1,head_in_queue->peremenai_2);
     }
     tmp_res->next_out=NULL;
-    if (tail_out_queue != NULL)
-    {
-        tail_out_queue->next_out=tmp_res;
-        tail_out_queue=tmp_res;
-    }
-    else
-    {
-        head_out_queue=tmp_res;
-        tail_out_queue=tmp_res;
-    }
+    return tmp_res;
 }

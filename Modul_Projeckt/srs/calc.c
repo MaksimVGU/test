@@ -4,10 +4,13 @@
 #include "num.h"
 #include "list.h"
 #include "queue.h"
+#include "stack.h"
 QUEUE_IN *head_in_queue=NULL;
 QUEUE_IN *tail_in_queue=NULL;
 QUEUE_OUT *head_out_queue=NULL;
 QUEUE_OUT *tail_out_queue=NULL;
+STACK_IN *head_in_stack=NULL;
+STACK_OUT *head_out_stack=NULL;
 int main(int argc,char *argv[])
 {
     setvbuf(stdout, NULL, _IONBF, 0);
@@ -91,7 +94,7 @@ int main(int argc,char *argv[])
                                 {
                                     fprintf(output," %0.1f ",current->peremenai_2[i]);
                                 }
-                                fprintf(output," ) = ");
+                                fprintf(output," )  = ");
                                 if (current->deistvie!='*')
                                 {
                                     fprintf(output," ( ");
@@ -103,14 +106,16 @@ int main(int argc,char *argv[])
                                 }
                                 else
                                 {
-                                    fprintf(output," %0.1f\n",current_OUT->rez[0]);
+                                	fprintf(output," ( ");
+                                    fprintf(output," %0.1f ",current_OUT->rez[0]);
+                                    fprintf(output,")\n");
                                 }
                             }
                             else if (current->size==1)
                             {
                                 if (current->deistvie!='!')
                                 {
-                                    fprintf(output," %0.1f %c %0.1f = %0.0f ",current->peremenai_1[0],current->deistvie,current->peremenai_2[0],current_OUT->rez[0]);
+                                    fprintf(output," %0.1f %c %0.1f = %0.1f ",current->peremenai_1[0],current->deistvie,current->peremenai_2[0],current_OUT->rez[0]);
                                     fprintf(output,"\n");
                                 }
                                 else
@@ -129,6 +134,8 @@ int main(int argc,char *argv[])
                 }
                 break;
             case 'q':
+            	QUEUE_IN *tmp=malloc(1*sizeof(QUEUE_IN));
+            	QUEUE_OUT *tmp_res=malloc(1*sizeof(QUEUE_OUT));
                 float *p_1,*p_2;
                 char d;
                 int s;
@@ -165,30 +172,50 @@ int main(int argc,char *argv[])
                                     fscanf(input," %f",&p_1[i]);
                                 }
                             }
-                            add_el_in_queue(p_1, d , p_2 ,s, tail_in_queue, head_in_queue);
+                            tmp=add_el_in_queue(p_1, d , p_2 ,s);
+							if (tail_in_queue != NULL)
+							{
+								tail_in_queue->next_in=tmp;
+								tail_in_queue=tmp;
+							}
+							else
+							{
+								head_in_queue=tmp;
+								tail_in_queue=tmp;
+							}
                         }
                         fclose(input);
                         output=fopen(File_OUT,"w");
                         while (head_in_queue != NULL)
                         {
-                            add_el_out_queue(head_out_queue,head_in_queue,tail_out_queue);
+                            tmp_res=add_el_out_queue(head_in_queue);
+                            if (tail_out_queue != NULL)
+                            {
+                                tail_out_queue->next_out=tmp_res;
+                                tail_out_queue=tmp_res;
+                            }
+                            else
+                            {
+                                head_out_queue=tmp_res;
+                                tail_out_queue=tmp_res;
+                            }
                             head_in_queue=del_in_queue(head_in_queue);
                         }
                         while (head_out_queue!=NULL)
                         {
                             if (head_out_queue->size>1)
                             {
-                                fprintf(output," ( ");
+                                fprintf(output,"( ");
                                 for (int i=0;i<head_out_queue->size;i++)
                                 {
-                                    fprintf(output," %1.f ", head_out_queue->peremenai_1[i]);
+                                    fprintf(output," %0.1f ", head_out_queue->peremenai_1[i]);
                                 }
                                 fprintf(output," ) ");
                                 fprintf(output,"%c",head_out_queue->deistvie);
                                 fprintf(output," ( ");
                                 for (int i=0;i<head_out_queue->size;i++)
                                 {
-                                    fprintf(output," %1.f ", head_out_queue->peremenai_2[i]);
+                                    fprintf(output," %0.1f ", head_out_queue->peremenai_2[i]);
                                 }
                                 fprintf(output," ) ");
                                 fprintf(output," = ");
@@ -204,13 +231,13 @@ int main(int argc,char *argv[])
                                 {
                                     fprintf(output," %0.1f ", head_out_queue->rez[0]);
                                 }
-                                fprintf(output," )\n");
+                                fprintf(output,")\n");
                             }
                             else if (head_out_queue->size==1)
                             {
                                 if(head_out_queue->deistvie != '!')
                                 {
-                                    fprintf(output," %0.1f %c %f = %0.1f \n",head_out_queue->peremenai_1[0],head_out_queue->deistvie,head_out_queue->peremenai_2[0],head_out_queue->rez[0]);
+                                    fprintf(output," %0.1f %c %0.1f = %0.1f \n",head_out_queue->peremenai_1[0],head_out_queue->deistvie,head_out_queue->peremenai_2[0],head_out_queue->rez[0]);
                                 }
                                 else
                                 {
@@ -224,11 +251,92 @@ int main(int argc,char *argv[])
                         tail_out_queue=NULL;
                         free(p_1);
                         free(p_2);
+                        tmp=NULL;
+                        tmp_res=NULL;
                     }
                     printf("продолжить? \n");
                     scanf(" %c", &end);
                 }
                 break;
+            case's':
+            	while(end!='n')
+            	{
+            		float *p1,*p2;
+            		STACK_IN *tmp_s=malloc(1*sizeof(STACK_IN));
+            		STACK_OUT *tmp_res_s=malloc(1*sizeof(STACK_OUT));
+            		float *rez;
+            		char d;
+            		int chet_2=0;
+            		printf("Введите откуда читать\n");
+            		scanf("%s",File_IN);
+            		printf("Введите куда записать\n");
+            		scanf("%s",File_OUT);
+            		input=fopen(File_IN,"r");
+            		if (!feof(input))
+            		{
+            			while(!feof(input))
+            			{
+            				p1=malloc(1*sizeof(float));
+            				p2=malloc(1*sizeof(float));
+            				fscanf(input," %f",&p1[0]);
+            				fscanf(input," %f",&p2[0]);
+            				fscanf(input," %c",&d);
+            				tmp_s=add_el_in_stack(p1, p2, d);
+            			    if (head_in_stack != NULL)
+            				{
+            					tmp_s->next_in=head_in_stack;
+            			        head_in_stack=tmp_s;
+            				}
+            				else
+            				{
+            			        tmp_s->next_in=NULL;
+            			        head_in_stack=tmp_s;
+            				}
+            				chet_2++;
+            			}
+            			fclose(input);
+            			output=fopen(File_OUT,"w");
+            			while (head_in_stack != NULL)
+            			{
+            				rez=num(head_in_stack->deistvie,head_in_stack->peremenai_1,head_in_stack->peremenai_2);
+            				tmp_res_s=add_el_out_stack(head_in_stack,rez);
+            				if (head_out_stack != NULL)
+            				{
+            					tmp_res_s->next_out=head_out_stack;
+            					head_out_stack=tmp_res_s;
+            				}
+            				else
+            				{
+            					tmp_res_s->next_out=NULL;
+            					head_out_stack=tmp_res_s;
+            				}
+            				head_in_stack=del_in_stack(head_in_stack);
+            			}
+            			while (chet_2 != 1)
+            			{
+            				if(head_out_stack->deistvie != '!')
+            				{
+            					fprintf(output," %0.1f %c %0.1f = %0.1f \n",head_out_stack->peremenai_1[0],head_out_stack->deistvie,head_out_stack->peremenai_2[0],head_out_stack->rez[0]);
+            				}
+            				else
+            				{
+            					fprintf(output," %0.1f %c = %0.1f \n",head_out_stack->peremenai_1[0],head_out_stack->deistvie,head_out_stack->rez[0]);
+            				}
+            				head_out_stack=del_out_stack(head_out_stack);
+            				chet_2--;
+            			}
+            			head_out_stack=del_out_stack(head_out_stack);
+            			fclose(output);
+            			free(rez);
+            			free(p1);
+            			free(p2);
+            			tmp_res_s=NULL;
+            			tmp_s=NULL;
+            		}
+            		printf("продолжить? \n");
+            		scanf(" %c", &end);
+            	}
+            	break;
         }
         printf("продолжить программу? \n");
         scanf(" %c", &end_program);

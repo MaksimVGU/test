@@ -27,3 +27,4 @@ List_IN *del_in(List_IN *current);//ФУНКЦИЯ УДАЛЕНЯИ ЭЛЕМЕН
 List_OUT *del_out(List_OUT *current);//ФУНКЦИЯ УДАЛЕНЯИ ЭЛЕМЕНТА(OUT)
 
 #endif /* SRS_LIST_H_ */
+

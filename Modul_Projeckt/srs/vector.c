@@ -23,6 +23,7 @@ float*vector(char deistvie,int size, float *peremenai_1,float *peremenai_2) 	//�
             break;
         case '*'://блок умножние
             rez=malloc(1);
+            rez[0]=0;
             for (int i = 0; i<size; i++)
             {
                 rez[0]+=(peremenai_1[i]*peremenai_2[i]);
