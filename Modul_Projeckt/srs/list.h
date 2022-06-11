@@ -1,9 +1,6 @@
 #ifndef SRS_LIST_H_
 #define SRS_LIST_H_
 
-#include <stdio.h>
-#include <stdlib.h>
-
 typedef struct List_IN					//СТРУКТУРА ДЛЯ ВВОДА ДАННЫХ
 {
     int size;
@@ -13,16 +10,12 @@ typedef struct List_IN					//СТРУКТУРА ДЛЯ ВВОДА ДАННЫХ
     struct List_IN *next;
 }List_IN;
 
-
 typedef struct List_OUT					//СТРУКТУРА ДЛЯ ВЫВОДА ДАННЫХ
 {
     float *rez;
     struct List_OUT *next_out;
 }List_OUT;
 
-
-float *num(char deistvie,float *peremenai_1, float *peremenai_2);//ФУНКЦИЯ ДЕЙСТВИЯ С ЧИСЛАМИ
-float*vector(char deistvie,int size, float *peremenai_1,float *peremenai_2);//ФУНКЦИЯ ДЕЙСТВИЯ С ВЕКТОРАМИ
 float *addperemenai(FILE *input, int size);//ФУНКЦИЯ ДЛЯ ДОБАВЛЕНИЯ ЧИСЛА
 void add_el_in(List_IN *current, FILE *input);//ФУНКЦИЯ ДЛЯ ДОБАВЛЕНИЯ ЭЛЕМЕНТА ВВОДА
 void add_el_out(List_OUT *current_OUT, List_IN *current);//ФУНКЦИЯ ДЛЯ ДОБАВЛЕНИЯ ЭЛЕМЕНТА ВЫВОДА
